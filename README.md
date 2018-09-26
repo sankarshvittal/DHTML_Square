@@ -1,6 +1,6 @@
 # Project Title
 
-DHTML Squares
+DHTML Square
 
 ## Project Description
 
