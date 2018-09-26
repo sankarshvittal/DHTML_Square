@@ -8,9 +8,6 @@ Starts with a square on the page (a div) that's 50px x 50px. When the square is 
 
 Made use of addEventListener() to set all event listeners!
 
-### Prerequisites
-
-What things you need to install the software and how to install them
 
 
 ## Author
