@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang='en'>
+<head>
+  <meta charset='utf-8' />
+  <title>DHTML SQUARE</title>
+  <style>
+    div {
+      margin: 0 5px 5px 0;
+      background: #000;
+      position: absolute;
+    }
+  </style>
+  <script>
+  // This gobal variable is used to store the status on move which is used in click functionality
+  var move = true;
+    var SQUARE = {
+      timeouts: {},
+
+      init: function init() {
+        var ele;
+        self = this;
+
+        // Creating the square and setting the attributes
+        ele = document.createElement( "div" );
+        ele.style.width = "50px";
+        ele.style.height = "50px";
+        ele.style.left = "1px";
+        ele.setAttribute( "id", "square" );
+
+        // Event listerner on clicking the square
+        ele.addEventListener("click",function(){
+          self.click(this);
+        },false);
+
+        // Event listener for onmouseover
+        ele.addEventListener( "mouseover",function(){
+          self.slide(this,"over");
+        },false);
+
+        // Event listener for onmouseout
+        ele.addEventListener( "mouseout",function(){
+          self.slide(this,"out");
+        },false);
+
+        document.body.appendChild( ele );
+      },
+
+    slide: function slide( ele, dir ) {
+        dir = dir || "out";
+        self = this;
+
+        if ( dir === "over" ) {
+          if( move === true){
+            let curPos = parseInt( ele.style.left ),
+
+            // incremneting the position by 5
+            newPos = curPos + 5;
+
+            if ( newPos < 850 )
+            setTimeout( function(){
+              ele.style.left  = newPos.toString() + "px";
+              self.slide( ele, dir);
+            }, 40);
+        }
+        else{
+          move = true;
+        }
+      }
+        else if ( dir === "out" ) {
+          move = false;
+        }
+    },
+
+  click: function click( clickEle ) {
+      self = this;
+
+      //  the initial height and width are stored in the local storage
+      if ( localStorage.getItem( "initWidth" ) === null ){
+          localStorage.setItem( "initWidth", clickEle.style.width );
+          localStorage.setItem( "initHeight", clickEle.style.height );
+      }
+      let curWidth = parseInt(clickEle.style.width);
+      let curHeight = parseInt(clickEle.style.height);
+
+      newWidth = curWidth + 5;
+      newHeight = curHeight + 5;
+
+      let initWidth = parseInt(localStorage.getItem( "initWidth" ));
+      let initHeight = parseInt(localStorage.getItem( "initHeight" ));
+
+      // condition to increase the size of the square till it doubles and a particular value
+      if( newWidth <=  ( initWidth + initWidth ) && newHeight <= ( initHeight + initHeight ) && newWidth <= 400 ) {
+         setTimeout( function(){
+           clickEle.style.width = newWidth.toString() + "px";
+           clickEle.style.height = newHeight.toString() + "px";
+           self.click( clickEle )
+         }, 40);
+      }
+      else{
+          // once  the if condition fails, the initial height and width are removed from the local storage
+          localStorage.removeItem( "initWidth" );
+          localStorage.removeItem( "initHeight" );
+     }
+    }
+  }
+</script>
+</head>
+
+<body onload="SQUARE.init();">
+</body>
+
+</html>
